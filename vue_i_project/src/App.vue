@@ -6,6 +6,30 @@
   </div>
 </template>
 
+
+<script>
+    import {getLoginUserInfo} from "./request/user";
+
+    export default {
+        name: "App",
+        comments: {},
+        data() {
+            return {
+
+            }
+        },
+        methods: {},
+        created() {
+            getLoginUserInfo().then(data => {
+                let success = data.data.success
+                if (!success){
+                    // 未校验通过重定向到登录页面
+                    this.$router.push("/login")
+                }
+            })
+        },
+    }
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

@@ -30,15 +30,15 @@ export default {
   },
   data(){
     return {
-      message: "尼玛",
-      htmlMessage: "<span style='color: crimson'>尼玛逼</span>",
+      message: "修够",
+      htmlMessage: "<span style='color: crimson'>巴更巴更</span>",
       idMessage: "idNiMa",
       classMessage: "classNiMa",
 
       boolMessage: false,
       showMessage: false,
       forMessage: ["f", "o", "r"],
-      inputMessage: "input"
+      inputMessage: "input123"
     }
   },
   methods: {
