@@ -1,22 +1,10 @@
-from django.views.generic import View
+from interface_app.forms.service_form import ServiceForm
+from interface_app.libs.respone import ErrorCode
+from interface_app.models.service import Service
+from interface_app.views.base.base_list import MyBaseListView
 
 
-class ServiceListView(View):
-
-    def get(self, request, *args, **kwargs):
-        """
-        获取列表
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        pass
-
-    def post(self, request, *args, **kwargs):
-        """
-        新增数据
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        pass
+class ServiceListView(MyBaseListView):
+    model = Service
+    form = ServiceForm
+    code = ErrorCode.common

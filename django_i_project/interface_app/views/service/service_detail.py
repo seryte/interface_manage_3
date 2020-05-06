@@ -1,13 +1,10 @@
-from django.views.generic import View
+from interface_app.forms.service_form import ServiceForm
+from interface_app.libs.respone import ErrorCode
+from interface_app.models.service import Service
+from interface_app.views.base.base_detail import MyBaseDetailView
 
 
-class ServiceDetailView(View):
-
-    def get(self, request, service_id, *args, **kwargs):
-        pass
-
-    def put(self, request, service_id, *args, **kwargs):
-        pass
-
-    def patch(self, request, service_id, *args, **kwargs):
-        pass
+class ServiceDetailView(MyBaseDetailView):
+    model = Service
+    form = ServiceForm
+    code = ErrorCode.common

@@ -10,6 +10,8 @@ from django.http import JsonResponse
 class ErrorCode:
     common = 10000
     auth = 10001
+    service = 10002
+    task = 10003
 
 
 def common_respone(success, data, error_code, error_message):
