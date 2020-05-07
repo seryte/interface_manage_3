@@ -83,7 +83,22 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           // this.loading = true
-          login(this.loginForm.username, this.loginForm.password)
+          login(this.loginForm.username, this.loginForm.password).then(data=>{
+            let success = data.data.success
+            if (success){
+                this.$message({
+                    message: '登录成功',
+                    type: 'success'
+                });
+                this.$router.push("/")
+            } else {
+                this.$notify.error({
+                  title: "错误",
+                  message: data.data.error.message
+
+                })
+            }
+          })
         } else {
           console.log('error submit!!')
           return false
@@ -95,7 +110,22 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           // this.loading = true
-          register(this.loginForm.username, this.loginForm.password)
+          register(this.loginForm.username, this.loginForm.password).then(data=>{
+            let success = data.data.success
+            if (success){
+              this.$message({
+                    message: '注册成功',
+                    type: 'success'
+                });
+              this.$router.push("/")
+            }else{
+              this.$notify.error({
+                title: "错误",
+                message: data.data.error.message
+              })
+
+            }
+          })
         } else {
           console.log('error submit!!')
           return false
