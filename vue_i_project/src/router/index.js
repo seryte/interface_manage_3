@@ -17,7 +17,12 @@ Vue.use(VueRouter)
         path: "service",
         name: "service",
         component: () => import("../views/service/index.vue")
-      }
+      },
+      {
+        path: "",
+        name: "service",
+        component: () => import("../views/service/index.vue")
+      },
     ]
   },
   {

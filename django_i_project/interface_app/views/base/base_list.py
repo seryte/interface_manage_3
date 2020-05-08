@@ -9,7 +9,6 @@ from interface_app.models.service import Service
 
 
 class MyBaseListView(View):
-
     model = Service
     form = ServiceForm
     code = ErrorCode.common
@@ -42,7 +41,7 @@ class MyBaseListView(View):
         if not form.is_valid():
             return response_failed(code=self.code)
 
-        service = self.model.objects.create(**form.changed_data)
+        service = self.model.objects.create(**form.cleaned_data)
 
         if not service:
             return response_failed(code=ErrorCode.service)

@@ -31,7 +31,7 @@ class MyBaseDetailView(View):
         if not service:
             return response_failed(code=ErrorCode.common, message="数据不存在！")
 
-        service = self.model.objects.filter(id=base_id).update(**form.changed_data)
+        service = self.model.objects.filter(id=base_id).update(**form.cleaned_data)
         return response_success(model_to_dict(service))
 
     def patch(self, request, base_id, *args, **kwargs):
