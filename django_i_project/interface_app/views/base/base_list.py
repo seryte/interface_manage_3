@@ -25,7 +25,7 @@ class MyBaseListView(View):
         for s in services:
             t = model_to_dict(s)
             ret.append(t)
-        return response_success(model_to_dict(ret))
+        return response_success(ret)
 
     def post(self, request, *args, **kwargs):
         """

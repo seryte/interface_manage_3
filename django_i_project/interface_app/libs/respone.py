@@ -30,5 +30,5 @@ def response_success(data={}):
     return common_respone(True, data, "", "")
 
 
-def response_failed(code=ErrorCode, message="参数错误", data={}):
+def response_failed(code=ErrorCode.common, message="参数错误", data={}):
     return common_respone(False, data, code, message)

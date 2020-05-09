@@ -29,8 +29,8 @@ urlpatterns = [
     path('user/info/', user_views.get_user_info),
 
     path("api/services/", ServiceListView.as_view()),
-    path("api/service/<int:base_id>", ServiceDetailView.as_view()),
+    path("api/service/<int:base_id>/", ServiceDetailView.as_view()),
 
     path("api/task/", TaskListView.as_view()),
-    path("api/task/<int:base_id>", TaskDetailView.as_view()),
+    path("api/task/<int:base_id>/", TaskDetailView.as_view()),
 ]

@@ -21,9 +21,9 @@ class MyBaseDetailView(View):
 
     def put(self, request, base_id, *args, **kwargs):
         body = request.body
-        data = json.loads(body, encoding=-"utf-8")
+        data = json.loads(body, encoding="utf-8")
 
-        form = self.form()
+        form = self.form(data)
         if not form.is_valid():
             return response_failed()
 
@@ -31,7 +31,8 @@ class MyBaseDetailView(View):
         if not service:
             return response_failed(code=ErrorCode.common, message="数据不存在！")
 
-        service = self.model.objects.filter(id=base_id).update(**form.cleaned_data)
+        self.model.objects.filter(id=base_id).update(**form.cleaned_data)  # 这里返回是id
+        service = self.model.objects.filter(id=base_id).first()
         return response_success(model_to_dict(service))
 
     def patch(self, request, base_id, *args, **kwargs):

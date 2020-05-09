@@ -5,20 +5,20 @@ export const getAllTask = function () {
 };
 
 export const getSingleTask = function (taskId) {
-    return getRequest(`api/service/${taskId}`,)
+    return getRequest(`api/service/${taskId}/`,)
 };
 
 export const addTask = function (data) {
-    return postRequest("api/task", data)
+    return postRequest("api/task/", data)
 
 }
 
 export const deleteTask = function (taskId) {
     // `符号代表编程式字符串，等夹于"api/task/"+ taskId
-    return deleteRequest(`api/task/${taskId}`)
+    return deleteRequest(`api/task/${taskId}/`)
 
 }
 
 export const updateTask = function (taskId, data) {
-    return putRequest(`api/task/${taskId}`, data)
+    return putRequest(`api/task/${taskId}/`, data)
 }
