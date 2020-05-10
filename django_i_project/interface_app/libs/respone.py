@@ -12,6 +12,7 @@ class ErrorCode:
     auth = 10001
     service = 10002
     task = 10003
+    interface = 10004
 
 
 def common_respone(success, data, error_code, error_message):

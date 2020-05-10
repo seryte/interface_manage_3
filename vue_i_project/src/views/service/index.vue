@@ -4,12 +4,16 @@
         <div class="service-list">
             <el-card class="service-card" v-for="item in serviceList" :key="item.id">
                 <div slot="header" class="service-card-header">
-                    <div>{{item.name}}</div>
-                    <el-button style="padding: 3px 0;" type="text" @click="openEditModal(item)">编辑
-                    </el-button>
-                    <el-button style=" padding: 3px 0;margin-left: 5px;
-                    " type="text">删除
-                    </el-button>
+                    <div @click="goToInterface(item.id)">
+                        <a href="">{{item.name}}</a>
+                    </div>
+                    <div>
+                        <el-button style="padding: 3px 0;" type="text" @click="openEditModal(item)">编辑
+                        </el-button>
+                        <el-button style=" padding: 3px 0;margin-left: 5px;
+                    " type="text" @click="deleteServiceFun(item.id)">删除
+                        </el-button>
+                    </div>
                 </div>
                 <div>
                     {{item.description}}
@@ -54,7 +58,7 @@
 </template>
 
 <script>
-    import {addService, getAllService, updateService} from "../../request/service";
+    import {addService, deleteService, getAllService, updateService} from "../../request/service";
 
     export default {
         name: "service",
@@ -157,8 +161,36 @@
                         })
                     }
                 })
+            },
+            // 删除服务提示
+            deleteServiceFun(serviceId) {
+                this.$confirm('此操作将永久删除该服务, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //确定删除
+                    deleteService(serviceId).then(data => {
+                        let success = data.data.success
+                        if (success) {
+                            this.getAllServiceFun()
+                        } else {
+                            this.$notify.error({
+                                title: "错误",
+                                message: data.data.error.message
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    //取消删除
+                });
+            },
+
+            goToInterface(serviceId){
+                this.$router.push(`/interface/?serviceId=${serviceId}`)
             }
         },
+
 
         created() {
             this.getAllServiceFun();
