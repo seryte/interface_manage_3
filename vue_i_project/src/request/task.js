@@ -1,15 +1,15 @@
 import {deleteRequest, getRequest, postRequest, putRequest} from "./common";
 
 export const getAllTask = function () {
-    return getRequest("api/task/",)
+    return getRequest("api/tasks/",)
 };
 
 export const getSingleTask = function (taskId) {
-    return getRequest(`api/service/${taskId}/`,)
+    return getRequest(`api/task/${taskId}/`,)
 };
 
 export const addTask = function (data) {
-    return postRequest("api/task/", data)
+    return postRequest("api/tasks/", data)
 
 }
 

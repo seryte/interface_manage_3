@@ -188,7 +188,7 @@
 
             goToInterface(serviceId){
                 this.$router.push(`/interface/?serviceId=${serviceId}`)
-            }
+            },
         },
 
 

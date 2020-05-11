@@ -32,9 +32,9 @@ urlpatterns = [
     path("api/services/", ServiceListView.as_view()),
     path("api/service/<int:base_id>/", ServiceDetailView.as_view()),
 
-    path("api/task/", TaskListView.as_view()),
+    path("api/tasks/", TaskListView.as_view()),
     path("api/task/<int:base_id>/", TaskDetailView.as_view()),
 
-    path("api/interface/", InterfaceListView.as_view()),
+    path("api/interfaces/", InterfaceListView.as_view()),
     path("api/interface/<int:base_id>/", InterfaceListView.as_view()),
 ]
