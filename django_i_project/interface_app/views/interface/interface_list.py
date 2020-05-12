@@ -32,7 +32,8 @@ class InterfaceListView(MyBaseListView):
 
     def post(self, request, *args, **kwargs):
         """
-        新增数据
+
+        :param request:
         :param args:
         :param kwargs:
         :return:
