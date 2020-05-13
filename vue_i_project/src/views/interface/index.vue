@@ -24,7 +24,7 @@
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
                     <el-button
-                            @click="openEditDialog()"
+                            @click="openEditDialog(scope.row)"
                             size="mini">编辑
                     </el-button>
                     <el-button
@@ -49,7 +49,8 @@
                 </el-form-item>
 
                 <el-form-item label="接口详情" prop="context">
-                    <el-input v-model="addForm.context"></el-input>
+                    <editor v-model="addForm.context" @init="editorInit" lang="json" theme="chrome" width="450"
+                            height="200"></editor>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -72,7 +73,8 @@
                 </el-form-item>
 
                 <el-form-item label="接口详情" prop="context">
-                    <el-input v-model="editForm.context"></el-input>
+                    <editor v-model="editForm.context" @init="editorInit" lang="json" theme="chrome" width="450"
+                            height="200"></editor>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -84,10 +86,14 @@
 </template>
 
 <script>
-    import {deleteInterface, getAllInterfaces} from "../../request/interface";
+    import {addInterface, deleteInterface, getAllInterfaces, updateInterface} from "../../request/interface";
 
     export default {
         name: "index",
+        components: {
+            // interface页面的context文件框
+            editor: require("vue2-ace-editor")
+        },
         data() {
             return {
                 editDialogVisible: false,
@@ -125,18 +131,96 @@
 
         },
         methods: {
+            // 这个就是在interface页面中的context文本编辑功能
+            editorInit: function () {
+                require('brace/ext/language_tools') //language extension prerequsite...
+                require('brace/mode/json')
+                require('brace/mode/javascript')    //language  这里改为sjon
+                require('brace/mode/less')
+                require('brace/theme/chrome')
+                require('brace/snippets/javascript') //snippet
+            },
             saveEditInterface() {
+                this.$refs.editRuleForm.validate((valid) => {
+                    if (valid) {
+                        let req = JSON.parse(JSON.stringify(this.editForm))
+                        req.context = JSON.parse(req.context)
+                        updateInterface(req.id, req).then(data => {
+                            let success = data.data.data
+                            if (success) {
+                                this.$message({
+                                    message: '保存成功',
+                                    type: 'success'
+                                });
+                                this.getInterfacesFun();
+                                this.editDialogVisible = false;
+
+                            } else {
+                                this.$notify.error({
+                                    title: "错误",
+                                    message: data.data.error.message
+                                });
+                            }
+                        })
+
+                    } else {
+                        console.log("edit submit")
+                        return false;
+                    }
+                })
 
             },
             saveAddInterface() {
+                // 重点学习一下，表单处理
+                this.$refs.addRuleForm.validate((valid) => {
+                    if (valid) {
+                        let req = JSON.parse(JSON.stringify(this.addForm))
+                        req.context = JSON.parse(req.context)
+                        req.service_id = this.serviceId;
+                        addInterface(req).then(data => {
+                            let success = data.data.data
+                            if (success) {
+                                this.$message({
+                                    message: '接口创建成功',
+                                    type: 'success'
+                                });
+                                this.getInterfacesFun();
+                                this.addDialogVisible = false;
 
+                            } else {
+                                this.$notify.error({
+                                    title: "错误",
+                                    message: data.data.error.message
+                                });
+                            }
+                        })
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
 
             },
+
+
             openAddModal() {
+                let context = {
+                    "method": "get",
+                    "url": "",
+                    "params": {},
+                    "assert": {}
+                }
+                this.addForm.context = JSON.stringify(context, null, 4)
                 this.addDialogVisible = true;
             },
-            openEditDialog() {
-                this.editDialogVisible = true
+            openEditDialog(data) {
+                this.editForm.id = data.id;
+                this.editForm.name = data.name;
+                this.editForm.description = data.description;
+                this.editForm.service_id = data.service_id;
+                this.editForm.context = JSON.stringify(data.context, null, 4)
+                this.editDialogVisible = true;
+
             },
             getServiceId() {
                 //获取url里边的参数
