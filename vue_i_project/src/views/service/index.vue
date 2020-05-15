@@ -5,7 +5,7 @@
             <el-card class="service-card" v-for="item in serviceList" :key="item.id">
                 <div slot="header" class="service-card-header">
                     <div @click="goToInterface(item.id)">
-                        <a href="">{{item.name}}</a>
+                        <a href="javascript:void(0)">{{item.name}}</a>
                     </div>
                     <div>
                         <el-button style="padding: 3px 0;" type="text" @click="openEditModal(item)">编辑

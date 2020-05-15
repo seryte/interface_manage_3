@@ -13,6 +13,7 @@ class ErrorCode:
     service = 10002
     task = 10003
     interface = 10004
+    task_interface = 10005
 
 
 def common_respone(success, data, error_code, error_message):

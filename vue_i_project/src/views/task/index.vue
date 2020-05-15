@@ -4,7 +4,9 @@
         <div class="task-list">
             <el-card class="task-card" v-for="item in taskList" :key="item.id">
                 <div slot="header" class="task-card-header">
-                    <div>{{item.name}}</div>
+                    <div>
+                        <a href="javascript:void(0)" @click="showDrawer(item.id)">{{item.name}}</a>
+                    </div>
                     <div>
                         <el-button style="padding: 3px 0;" type="text" @click="openEditModal(item)">编辑
                         </el-button>
@@ -51,17 +53,62 @@
             </div>
         </el-dialog>
 
+        <el-drawer
+                :visible.sync="drawerShowFlag"
+                direction="rtl"
+                size="40%">
+            <!--            slot是插槽，占位符的感觉，这里等于重写了title-->
+            <div slot="title">
+                <el-button type="primary" @click="editTaskFun">添加接口</el-button>
+            </div>
+            <el-table
+                    :data="interfaces"
+                    stripe
+                    style="width: 100%">
+                <el-table-column
+                        prop="name"
+                        label="名称"
+                        min-width="40%">
+                </el-table-column>
+
+                <el-table-column
+                        label="URL"
+                        min-width="45%">
+                    <template slot-scope="scope">
+                        {{scope.row.context.url}}
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="操作" min-width="15%">
+                    <template slot-scope="scope">
+<!--                        <el-button-->
+<!--                                @click="deleteTaskInterfaceFun(scope.row)"-->
+<!--                                size="mini"-->
+<!--                                type="danger">删除-->
+<!--                        </el-button>-->
+                        <el-button
+                                @click="deleteTaskInterfaceFun(scope.row)"
+                                size="mini"
+                                type="danger">删除
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-drawer>
+
 
     </div>
 </template>
 
 <script>
     import {addTask, deleteTask, getAllTask, updateTask} from "../../request/task";
+    import {getTaskInterface} from "../../request/taskInterface";
 
     export default {
         name: "task",
         data() {
             return {
+                table: false,
                 dialogAddVisible: false,
                 dialogEditVisible: false,
                 addForm: {
@@ -90,9 +137,29 @@
                     ]
                 },
                 taskList: [],
+                interfaces: [],
+                drawerShowFlag: false,
             }
         },
         methods: {
+            showDrawer(taskId) {
+                getTaskInterface(taskId).then(data => {
+                    let success = data.data.success
+                    if (success) {
+                        this.interfaces = data.data.data;
+                    } else {
+                        this.$notify.error({
+                            title: "错误",
+                            message: data.data.error.message
+                        })
+                    }
+                })
+                this.drawerShowFlag = true;
+
+            },
+            deleteTaskInterfaceFun(taskInterfaceId) {
+
+            },
             openAddModal() { //这是打开创建任务窗口
                 this.dialogAddVisible = true
             },

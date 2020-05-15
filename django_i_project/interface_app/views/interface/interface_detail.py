@@ -38,4 +38,6 @@ class InterfaceDetailView(MyBaseDetailView):
 
         self.model.objects.filter(id=base_id).update(**form.cleaned_data)  # 这里返回是id
         interface = self.model.objects.filter(id=base_id).first()
-        return response_success(model_to_dict(interface))
+        ret = model_to_dict(interface)
+        ret["context"] = json.loads(ret["context"], encoding="utf-8")
+        return response_success(ret)
