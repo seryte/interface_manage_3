@@ -86,7 +86,7 @@
 </template>
 
 <script>
-    import {addInterface, deleteInterface, getAllInterfaces, updateInterface} from "../../request/interface";
+    import {addInterface, deleteInterface, getInterfaces, updateInterface} from "../../request/interface";
 
     export default {
         name: "index",
@@ -149,7 +149,7 @@
                             let success = data.data.data
                             if (success) {
                                 this.$message({
-                                    message: '保存成功',
+                                    message: '修改成功',
                                     type: 'success'
                                 });
                                 this.getInterfacesFun();
@@ -181,7 +181,7 @@
                             let success = data.data.data
                             if (success) {
                                 this.$message({
-                                    message: '接口创建成功',
+                                    message: '创建成功',
                                     type: 'success'
                                 });
                                 this.getInterfacesFun();
@@ -233,7 +233,7 @@
             },
 
             getInterfacesFun() {
-                getAllInterfaces(this.serviceId).then(data => {
+                getInterfaces(this.serviceId).then(data => {
                     let success = data.data.success;
                     if (success) {
                         this.interfaces = data.data.data;

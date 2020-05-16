@@ -20,7 +20,6 @@ class TaskInterfaceListView(MyBaseListView):
         ret = []
         for s in task_interfaces:
             interface = Interface.objects.filter(id=s.interface_id).first()
-            print(interface)
             t = model_to_dict(interface)
             t["context"] = json.loads(t["context"], encoding="utf-8")
             t["task_id"] = task_id

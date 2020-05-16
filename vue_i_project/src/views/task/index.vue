@@ -5,7 +5,7 @@
             <el-card class="task-card" v-for="item in taskList" :key="item.id">
                 <div slot="header" class="task-card-header">
                     <div>
-                        <a href="javascript:void(0)" @click="showDrawer(item.id)">{{item.name}}</a>
+                        <a href="javascript:void(0)" @click="showDrawer(item.id)" style='text-decoration:none;'>{{item.name}}</a>
                     </div>
                     <div>
                         <el-button style="padding: 3px 0;" type="text" @click="openEditModal(item)">编辑
@@ -59,7 +59,7 @@
                 size="40%">
             <!--            slot是插槽，占位符的感觉，这里等于重写了title-->
             <div slot="title">
-                <el-button type="primary" @click="editTaskFun">添加接口</el-button>
+                <el-button type="primary" @click="showAddInterface=true">添加接口</el-button>
             </div>
             <el-table
                     :data="interfaces"
@@ -81,11 +81,6 @@
 
                 <el-table-column label="操作" min-width="15%">
                     <template slot-scope="scope">
-                        <!--                        <el-button-->
-                        <!--                                @click="deleteTaskInterfaceFun(scope.row)"-->
-                        <!--                                size="mini"-->
-                        <!--                                type="danger">删除-->
-                        <!--                        </el-button>-->
                         <el-button
                                 @click="deleteTaskInterfaceFun(scope.row)"
                                 size="mini"
@@ -94,8 +89,18 @@
                     </template>
                 </el-table-column>
             </el-table>
-        </el-drawer>
 
+        </el-drawer>
+        <el-dialog
+                title="添加接口"
+                :visible.sync="showAddInterface"
+                width="40%">
+            <selectInterface></selectInterface>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="showAddInterface = false">取 消</el-button>
+                <el-button type="primary" @click="showAddInterface = false">确 定</el-button>
+              </span>
+        </el-dialog>
 
     </div>
 </template>
@@ -103,9 +108,13 @@
 <script>
     import {addTask, deleteTask, getAllTask, updateTask} from "../../request/task";
     import {deleteTaskInterface, getTaskInterface} from "../../request/taskInterface";
+    import selectInterface from "./selectInterface"
 
     export default {
         name: "task",
+        components: {
+            selectInterface
+        },
         data() {
             return {
                 table: false,
@@ -139,6 +148,7 @@
                 taskList: [],
                 interfaces: [],
                 drawerShowFlag: false,
+                showAddInterface: false,
             }
         },
         methods: {
@@ -167,6 +177,11 @@
                     deleteTaskInterface(taskInterface.task_interface_id).then(data => {
                         let success = data.data.success
                         if (success) {
+
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
                             this.showDrawer(taskInterface.task_id)
                         } else {
                             this.$notify.error({
@@ -198,6 +213,10 @@
                             if (success) {
                                 this.dialogAddVisible = false;
                                 this.getAllTaskFun()
+                                this.$message({
+                                    message: '创建成功',
+                                    type: 'success'
+                                });
                             } else {
                                 this.$notify.error({
                                     title: "错误",
@@ -219,6 +238,10 @@
                             if (success) {
                                 this.dialogEditVisible = false;
                                 this.getAllTaskFun()
+                                this.$message({
+                                    message: '修改成功',
+                                    type: 'success'
+                                });
 
                             } else {
                                 this.$notify.error({
@@ -257,6 +280,10 @@
                     deleteTask(taskId).then(data => {
                         let success = data.data.success
                         if (success) {
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
                             this.getAllTaskFun()
                         } else {
                             this.$notify.error({

@@ -5,7 +5,7 @@
             <el-card class="service-card" v-for="item in serviceList" :key="item.id">
                 <div slot="header" class="service-card-header">
                     <div @click="goToInterface(item.id)">
-                        <a href="javascript:void(0)">{{item.name}}</a>
+                        <a href="javascript:void(0)" style='text-decoration:none;'>{{item.name}}</a>
                     </div>
                     <div>
                         <el-button style="padding: 3px 0;" type="text" @click="openEditModal(item)">编辑
@@ -114,6 +114,10 @@
                             if (success) {
                                 this.dialogAddVisible = false;
                                 this.getAllServiceFun()
+                                this.$message({
+                                message: '创建成功',
+                                type: 'success'
+                            });
                             } else {
                                 this.$notify.error({
                                     title: "错误",
@@ -135,6 +139,10 @@
                             if (success) {
                                 this.dialogEditVisible = false;
                                 this.getAllServiceFun()
+                                this.$message({
+                                message: '修改成功',
+                                type: 'success'
+                            });
 
                             } else {
                                 this.$notify.error({
@@ -174,6 +182,10 @@
                         let success = data.data.success
                         if (success) {
                             this.getAllServiceFun()
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
                         } else {
                             this.$notify.error({
                                 title: "错误",

@@ -1,6 +1,6 @@
 import {deleteRequest, getRequest, postRequest, putRequest} from "./common";
 
-export const getAllInterfaces = function (serviceId) {
+export const getInterfaces = function (serviceId) {
     return getRequest(`api/interfaces/?service_id=${serviceId}`)
 };
 
