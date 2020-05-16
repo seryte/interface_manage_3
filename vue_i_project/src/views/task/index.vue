@@ -81,11 +81,11 @@
 
                 <el-table-column label="操作" min-width="15%">
                     <template slot-scope="scope">
-<!--                        <el-button-->
-<!--                                @click="deleteTaskInterfaceFun(scope.row)"-->
-<!--                                size="mini"-->
-<!--                                type="danger">删除-->
-<!--                        </el-button>-->
+                        <!--                        <el-button-->
+                        <!--                                @click="deleteTaskInterfaceFun(scope.row)"-->
+                        <!--                                size="mini"-->
+                        <!--                                type="danger">删除-->
+                        <!--                        </el-button>-->
                         <el-button
                                 @click="deleteTaskInterfaceFun(scope.row)"
                                 size="mini"
@@ -102,7 +102,7 @@
 
 <script>
     import {addTask, deleteTask, getAllTask, updateTask} from "../../request/task";
-    import {getTaskInterface} from "../../request/taskInterface";
+    import {deleteTaskInterface, getTaskInterface} from "../../request/taskInterface";
 
     export default {
         name: "task",
@@ -157,8 +157,27 @@
                 this.drawerShowFlag = true;
 
             },
-            deleteTaskInterfaceFun(taskInterfaceId) {
-
+            deleteTaskInterfaceFun(taskInterface) {
+                this.$confirm('此操作将永久删除该接口, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //确定删除
+                    deleteTaskInterface(taskInterface.task_interface_id).then(data => {
+                        let success = data.data.success
+                        if (success) {
+                            this.showDrawer(taskInterface.task_id)
+                        } else {
+                            this.$notify.error({
+                                title: "错误",
+                                message: data.data.error.message
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    //取消删除
+                });
             },
             openAddModal() { //这是打开创建任务窗口
                 this.dialogAddVisible = true

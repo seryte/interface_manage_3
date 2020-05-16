@@ -23,6 +23,8 @@ class TaskInterfaceListView(MyBaseListView):
             print(interface)
             t = model_to_dict(interface)
             t["context"] = json.loads(t["context"], encoding="utf-8")
+            t["task_id"] = task_id
+            t["task_interface_id"] = s.id
             ret.append(t)
         return response_success(ret)
 
