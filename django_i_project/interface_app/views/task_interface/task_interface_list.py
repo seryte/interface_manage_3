@@ -35,7 +35,7 @@ class TaskInterfaceListView(MyBaseListView):
             return response_failed(data)
 
         for item in data:
-            form = self.form(data)
+            form = self.form(item)
             if not form.is_valid():
                 return response_failed(form)
             service = self.model.objects.create(**form.cleaned_data)

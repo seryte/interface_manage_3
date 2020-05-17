@@ -1,0 +1,6 @@
+F test-demo2.py::test_main
+ def test_main():
+ >       assert 5 != 5
+ E       assert 5 != 5
+ 
+ test-demo2.py:5: AssertionError
