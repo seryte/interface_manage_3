@@ -59,7 +59,7 @@
                 size="40%">
             <!--            slot是插槽，占位符的感觉，这里等于重写了title-->
             <div slot="title">
-                <el-button type="primary" @click="showAddInterface=true">添加接口</el-button>
+                <el-button type="primary" @click="showAddInterface=true">关联接口</el-button>
             </div>
             <el-table
                     :data="interfaces"
@@ -92,7 +92,7 @@
 
         </el-drawer>
         <el-dialog
-                title="添加接口"
+                title="关联接口"
                 :visible.sync="showAddInterface"
                 width="40%">
             <selectInterface ref="selectInterface"></selectInterface>

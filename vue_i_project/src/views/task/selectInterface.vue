@@ -26,7 +26,7 @@
                     style="width: 100%;max-height: 600px; overflow: auto">
                 <el-table-column
                         type="selection"
-                        width="5%">
+                        width="%5">
                 </el-table-column>
                 <el-table-column
                         prop="name"
@@ -97,7 +97,7 @@
             },
         },
         created() {
-            this.getAllServiceFun()
+            this.getAllServiceFun();
 
         }
     }
