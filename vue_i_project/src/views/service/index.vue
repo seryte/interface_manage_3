@@ -1,26 +1,39 @@
 <template>
     <div class="service-main">
         <el-button @click="openAddModal">创建服务</el-button>
-        <div class="service-list">
-            <el-card class="service-card" v-for="item in serviceList" :key="item.id">
-                <div slot="header" class="service-card-header">
-                    <div @click="goToInterface(item.id)">
-                        <a href="javascript:void(0)" style='text-decoration:none;'>{{item.name}}</a>
-                    </div>
-                    <div>
-                        <el-button style="padding: 3px 0;" type="text" @click="openEditModal(item)">编辑
-                        </el-button>
-                        <el-button style=" padding: 3px 0;margin-left: 5px;
-                    " type="text" @click="deleteServiceFun(item.id)">删除
-                        </el-button>
-                    </div>
-                </div>
-                <div>
-                    {{item.description}}
-                </div>
-            </el-card>
-        </div>
-
+        <el-table
+                :data="serviceList"
+                style="width: 100%">
+            <el-table-column
+                    label="Date"
+                    prop="date">
+            </el-table-column>
+            <el-table-column
+                    label="Name"
+                    prop="name">
+            </el-table-column>
+            <el-table-column
+                    align="right">
+                <template slot="header" slot-scope="scope">
+                    {{scope.row}}
+                    <el-input
+                            v-model="search"
+                            size="mini"
+                            placeholder="输入关键字搜索"/>
+                </template>
+                <template slot-scope="scope">
+                    <el-button
+                            size="mini"
+                            @click="handleEdit(scope.$index, scope.row)">编辑
+                    </el-button>
+                    <el-button
+                            size="mini"
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row)">删除
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
         <el-dialog title="创建服务" :visible.sync="dialogAddVisible">
             <el-form :model="addForm" :rules="addRules" ref="addFormRef" label-width="50px" class="demo-addForm">
                 <el-form-item label="名称" prop="name">
@@ -115,9 +128,9 @@
                                 this.dialogAddVisible = false;
                                 this.getAllServiceFun()
                                 this.$message({
-                                message: '创建成功',
-                                type: 'success'
-                            });
+                                    message: '创建成功',
+                                    type: 'success'
+                                });
                             } else {
                                 this.$notify.error({
                                     title: "错误",
@@ -140,9 +153,9 @@
                                 this.dialogEditVisible = false;
                                 this.getAllServiceFun()
                                 this.$message({
-                                message: '修改成功',
-                                type: 'success'
-                            });
+                                    message: '修改成功',
+                                    type: 'success'
+                                });
 
                             } else {
                                 this.$notify.error({
@@ -198,7 +211,7 @@
                 });
             },
 
-            goToInterface(serviceId){
+            goToInterface(serviceId) {
                 this.$router.push(`/interface/?serviceId=${serviceId}`)
             },
         },
