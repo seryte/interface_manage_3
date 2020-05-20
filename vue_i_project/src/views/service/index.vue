@@ -2,15 +2,18 @@
     <div class="service-main">
         <el-button @click="openAddModal">创建服务</el-button>
         <el-table
-                :data="serviceList"
+                :data="serviceList.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
                 style="width: 100%">
             <el-table-column
-                    label="Date"
-                    prop="date">
+                    label="名称"
+                    prop="name">
+                 <template slot-scope="scope">
+                     <a href="javascript:void(0)" style='text-decoration:none;' @click="goToInterface(scope.row.id)">{{scope.row.name}}</a>
+                </template>
             </el-table-column>
             <el-table-column
-                    label="Name"
-                    prop="name">
+                    label="描述"
+                    prop="description">
             </el-table-column>
             <el-table-column
                     align="right">
@@ -24,16 +27,23 @@
                 <template slot-scope="scope">
                     <el-button
                             size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">编辑
+                            @click="openEditModal(scope.row)">编辑
                     </el-button>
                     <el-button
                             size="mini"
                             type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除
+                            @click="deleteServiceFun(scope.row.id)">删除
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <div class="pagestyle">
+            <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    :total="500">
+            </el-pagination>
+        </div>
         <el-dialog title="创建服务" :visible.sync="dialogAddVisible">
             <el-form :model="addForm" :rules="addRules" ref="addFormRef" label-width="50px" class="demo-addForm">
                 <el-form-item label="名称" prop="name">
@@ -105,6 +115,7 @@
                     ]
                 },
                 serviceList: [],
+                search: '',
             }
         },
         methods: {
@@ -250,5 +261,11 @@
     .service-card-header {
         display: flex;
         justify-content: space-between;
+    }
+
+    .pagestyle {
+        /*margin-top: 50px;*/
+        /*margin-right: -50px;*/
+        padding: 100px 10px 10px 900px;
     }
 </style>
