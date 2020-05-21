@@ -1,11 +1,13 @@
 import json
 
 from django.forms import model_to_dict
+from django.http import HttpResponse
 from django.views.generic import View
 
 from interface_app.forms.service_form import ServiceForm
 from interface_app.libs.respone import response_success, response_failed, ErrorCode
 from interface_app.models.service import Service
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 class MyBaseListView(View):
@@ -21,10 +23,25 @@ class MyBaseListView(View):
         :return:
         """
         services = self.model.objects.all()
+        paginator = Paginator(services, 2)
+        page = request.GET.get('page')
+        total_page = len(services)
+        print(total_page)
+        try:
+            contacts = paginator.page(page)
+        except PageNotAnInteger:
+            # 如果页数不是整型, 取第一页.
+            contacts = paginator.page(1)
+        except EmptyPage:
+            # 如果页数超出查询范围，取最后一页
+            contacts = paginator.page(paginator.num_pages)
         ret = []
-        for s in services:
+        for s in contacts:
+            print(s)
             t = model_to_dict(s)
+            print(t)
             ret.append(t)
+
         return response_success(ret)
 
     def post(self, request, *args, **kwargs):
