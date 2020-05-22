@@ -7,8 +7,8 @@
             <el-table-column
                     label="名称"
                     prop="name">
-                 <template slot-scope="scope">
-                     <a href="javascript:void(0)" style='text-decoration:none;' @click="goToInterface(scope.row.id)">{{scope.row.name}}</a>
+                <template slot-scope="scope">
+                    <a href="javascript:void(0)" style='text-decoration:none;' @click="goToInterface(scope.row.id)">{{scope.row.name}}</a>
                 </template>
             </el-table-column>
             <el-table-column
@@ -40,8 +40,13 @@
         <div class="pagestyle">
             <el-pagination
                     background
-                    layout="prev, pager, next"
-                    :total="500">
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[5, 10, 50, 100]"
+                    :page-size="pagesize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
             </el-pagination>
         </div>
         <el-dialog title="创建服务" :visible.sync="dialogAddVisible">
@@ -116,9 +121,22 @@
                 },
                 serviceList: [],
                 search: '',
+                total: 0,
+                pagesize: 10,
+                currentPage: 1,
             }
         },
         methods: {
+            handleSizeChange: function (size) {
+                this.pagesize = size;
+                this.getAllServiceFun(this.currentPage, size)
+                console.log(this.pagesize)  //每页下拉显示数据
+            },
+            handleCurrentChange: function (currentPage) {
+                this.currentPage = currentPage;
+                this.getAllServiceFun(currentPage, this.pagesize)
+                console.log(this.currentPage)  //点击第几页
+            },
             openAddModal() { //这是打开创建服务窗口
                 this.dialogAddVisible = true
             },
@@ -137,7 +155,7 @@
                             let success = data.data.success
                             if (success) {
                                 this.dialogAddVisible = false;
-                                this.getAllServiceFun()
+                                this.getAllServiceFun(this.currentPage, this.pagesize)
                                 this.$message({
                                     message: '创建成功',
                                     type: 'success'
@@ -162,7 +180,7 @@
                             let success = data.data.success
                             if (success) {
                                 this.dialogEditVisible = false;
-                                this.getAllServiceFun()
+                                this.getAllServiceFun(this.currentPage, this.pagesize)
                                 this.$message({
                                     message: '修改成功',
                                     type: 'success'
@@ -181,11 +199,13 @@
                 });
             },
             // 获取所有服务
-            getAllServiceFun() {
-                getAllService().then(data => {
+            getAllServiceFun(page, pageSize) {
+                getAllService(page, pageSize).then(data => {
                     let success = data.data.success
                     if (success) {
                         this.serviceList = data.data.data;
+                        this.total = data.data.count;
+                        console.log(this.total)
                     } else {
                         this.$notify.error({
                             title: "错误",
@@ -205,7 +225,7 @@
                     deleteService(serviceId).then(data => {
                         let success = data.data.success
                         if (success) {
-                            this.getAllServiceFun()
+                            this.getAllServiceFun(this.currentPage, this.pagesize)
                             this.$message({
                                 message: '删除成功',
                                 type: 'success'
@@ -225,11 +245,12 @@
             goToInterface(serviceId) {
                 this.$router.push(`/interface/?serviceId=${serviceId}`)
             },
-        },
+        }
+        ,
 
 
         created() {
-            this.getAllServiceFun();
+            this.getAllServiceFun(1, 10);
         }
     }
 </script>

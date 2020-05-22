@@ -1,7 +1,7 @@
 import {deleteRequest, getRequest, postRequest, putRequest} from "./common";
 
-export const getAllService = function () {
-    return getRequest("api/services/",)
+export const getAllService = function (page,pageSize) {
+    return getRequest(`api/services/?page=${page}&pageSize=${pageSize}`,)
 };
 
 export const getSingleService = function (serviceId) {

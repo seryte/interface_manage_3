@@ -16,20 +16,24 @@ class ErrorCode:
     task_interface = 10005
 
 
-def common_respone(success, data, error_code, error_message):
+def common_respone(success, data, error_code, error_message, page=1, pagesize=10, count=0):
     response = {
+        "page": page,
+        "pageSize": pagesize,
+        "count": count,
         "data": data,
         "success": success,
         "error": {
             "code": error_code,
             "message": error_message
         }
+
     }
     return JsonResponse(response, safe=False)
 
 
-def response_success(data={}):
-    return common_respone(True, data, "", "")
+def response_success(data={}, page=1, pagesize=10, count=0):
+    return common_respone(True, data, "", "", page=page, pagesize=pagesize, count=count)
 
 
 def response_failed(code=ErrorCode.common, message="参数错误", data={}):

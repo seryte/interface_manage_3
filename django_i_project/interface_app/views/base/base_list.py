@@ -23,10 +23,11 @@ class MyBaseListView(View):
         :return:
         """
         services = self.model.objects.all()
-        paginator = Paginator(services, 2)
         page = request.GET.get('page')
-        total_page = len(services)
-        print(total_page)
+        page_size = request.GET.get('pageSize')
+        paginator = Paginator(services, page_size)
+        count = len(services)
+
         try:
             contacts = paginator.page(page)
         except PageNotAnInteger:
@@ -35,14 +36,12 @@ class MyBaseListView(View):
         except EmptyPage:
             # 如果页数超出查询范围，取最后一页
             contacts = paginator.page(paginator.num_pages)
+
         ret = []
         for s in contacts:
-            print(s)
             t = model_to_dict(s)
-            print(t)
             ret.append(t)
-
-        return response_success(ret)
+        return response_success(ret, page=page, pagesize=page_size, count=count)
 
     def post(self, request, *args, **kwargs):
         """
