@@ -127,9 +127,9 @@
             }
         },
         methods: {
-            handleSizeChange: function (size) {
-                this.pagesize = size;
-                this.getAllServiceFun(this.currentPage, size)
+            handleSizeChange: function (pagesize) {
+                this.pagesize = pagesize;
+                this.getAllServiceFun(this.currentPage, this.pagesize)
                 console.log(this.pagesize)  //每页下拉显示数据
             },
             handleCurrentChange: function (currentPage) {

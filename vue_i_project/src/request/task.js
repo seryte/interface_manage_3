@@ -1,7 +1,7 @@
 import {deleteRequest, getRequest, postRequest, putRequest} from "./common";
 
-export const getAllTask = function () {
-    return getRequest("api/tasks/",)
+export const getAllTask = function (page, pageSize) {
+    return getRequest(`api/tasks/?page=${page}&pageSize=${pageSize}`,)
 };
 
 export const getSingleTask = function (taskId) {

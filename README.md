@@ -14,3 +14,4 @@ three
 * 2020-05-18 22:51:36
 * 2020-05-21 23:09 Paginator 
 * 2020-05-22 23:27 Paginator end
+* 2020-05-23 23:09 Paginator bug

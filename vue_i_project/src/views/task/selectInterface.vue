@@ -50,6 +50,7 @@
     import {getAllService} from "../../request/service";
     import {getInterfaces} from "../../request/interface";
 
+
     export default {
         name: "selectInterface",
         data() {
@@ -83,7 +84,7 @@
                 })
             },
             getAllServiceFun() {
-                getAllService().then(data => {
+                getAllService(1,100).then(data => {
                     let success = data.data.success
                     if (success) {
                         this.serviceList = data.data.data;

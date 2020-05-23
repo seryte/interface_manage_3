@@ -20,6 +20,18 @@
                 </div>
             </el-card>
         </div>
+        <div class="pagestyle">
+            <el-pagination
+                    background
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[5, 10, 50, 100]"
+                    :page-size="pagesize"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="total">
+            </el-pagination>
+        </div>
 
         <el-dialog title="创建任务" :visible.sync="dialogAddVisible">
             <el-form :model="addForm" :rules="addRules" ref="addFormRef" label-width="50px" class="demo-addForm">
@@ -92,7 +104,7 @@
 
         </el-drawer>
         <el-dialog
-                title="关联接口"
+                title="关联接1口"
                 :visible.sync="showAddInterface"
                 width="40%">
             <selectInterface ref="selectInterface"></selectInterface>
@@ -101,7 +113,6 @@
                 <el-button type="primary" @click="addTaskInterfacesFun">确 定</el-button>
               </span>
         </el-dialog>
-
     </div>
 </template>
 
@@ -150,9 +161,22 @@
                 drawerShowFlag: false,
                 showAddInterface: false,
                 currentTaskId: 0,
+                total: 0,
+                pagesize: 10,
+                currentPage: 1,
             }
         },
         methods: {
+            handleSizeChange: function (pagesize) {
+                this.pagesize = pagesize;
+                this.getAllTaskFun(this.currentPage, this.pagesize)
+                console.log("显示 "+this.pagesize+ "条")  //每页下拉显示数据
+            },
+            handleCurrentChange: function (currentPage) {
+                this.currentPage = currentPage;
+                this.getAllTaskFun(this.currentPage, this.pagesize)
+                console.log(this.currentPage)  //点击第几页
+            },
             addTaskInterfacesFun() {
                 let multipleSelection = this.$refs.selectInterface.multipleSelection
                 let req = []
@@ -240,7 +264,7 @@
                             let success = data.data.success
                             if (success) {
                                 this.dialogAddVisible = false;
-                                this.getAllTaskFun()
+                                this.getAllTaskFun(this.currentPage, this.pagesize)
                                 this.$message({
                                     message: '创建成功',
                                     type: 'success'
@@ -265,7 +289,7 @@
                             let success = data.data.success
                             if (success) {
                                 this.dialogEditVisible = false;
-                                this.getAllTaskFun()
+                                this.getAllTaskFun(this.currentPage, this.pagesize)
                                 this.$message({
                                     message: '修改成功',
                                     type: 'success'
@@ -284,11 +308,12 @@
                 });
             },
             // 获取所有任务
-            getAllTaskFun() {
-                getAllTask().then(data => {
+            getAllTaskFun(size, pageSize) {
+                getAllTask(size, pageSize).then(data => {
                     let success = data.data.success
                     if (success) {
                         this.taskList = data.data.data;
+                        this.total = data.data.count;
                     } else {
                         this.$notify.error({
                             title: "错误",
@@ -312,7 +337,7 @@
                                 message: '删除成功',
                                 type: 'success'
                             });
-                            this.getAllTaskFun()
+                            this.getAllTaskFun(this.currentPage, this.pagesize)
                         } else {
                             this.$notify.error({
                                 title: "错误",
@@ -328,7 +353,7 @@
 
 
         created() {
-            this.getAllTaskFun();
+            this.getAllTaskFun(1, 10);
         }
     }
 </script>
@@ -360,5 +385,11 @@
     .task-card-header {
         display: flex;
         justify-content: space-between;
+    }
+
+    .pagestyle {
+        /*margin-top: 50px;*/
+        /*margin-right: -50px;*/
+        padding: 100px 10px 10px 900px;
     }
 </style>
