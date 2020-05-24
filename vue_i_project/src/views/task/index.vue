@@ -314,6 +314,7 @@
                     if (success) {
                         this.taskList = data.data.data;
                         this.total = data.data.count;
+                        this.useTotal = this.total;
                     } else {
                         this.$notify.error({
                             title: "错误",
