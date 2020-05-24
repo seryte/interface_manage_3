@@ -59,7 +59,7 @@
                 serviceList: [],
                 interfaceList: [],
                 multipleSelection: [],
-                servicePageSize: 10, //默认展示10条服务
+                servicePageSize: undefined, //默认展示10条服务
             }
         },
         methods: {
@@ -85,38 +85,34 @@
                 })
             },
             // 最笨办法，多请求一次，只为获取服务列表总数
-            getServiceTotal() {
+            getAllServiceFun() {
                 getAllService(1, 1).then(data => {
                     let success = data.data.success
                     if (success) {
                         this.servicePageSize = data.data.count;
+                        getAllService(1, this.servicePageSize).then(data => {
+                            let success = data.data.success
+                            if (success) {
+                                this.serviceList = data.data.data;
+                            } else {
+                                this.$notify.error({
+                                    title: "错误",
+                                    message: data.data.error.message
+                                })
+                            }
+                        })
                     } else {
                         this.$notify.error({
-                            title: "获取服务列表失败错误",
+                            title: "获取服务列表失败",
                             message: data.data.error.message
                         })
                     }
                 })
 
-            },
-            getAllServiceFun() {
-                this.getServiceTotal();
-                getAllService(1, this.servicePageSize).then(data => {
-                    let success = data.data.success
-                    if (success) {
-                        this.serviceList = data.data.data;
-                    } else {
-                        this.$notify.error({
-                            title: "错误",
-                            message: data.data.error.message
-                        })
-                    }
-                })
             },
         },
         created() {
             this.getAllServiceFun();
-
         },
 
     }
