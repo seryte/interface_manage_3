@@ -53,16 +53,13 @@
 
     export default {
         name: "selectInterface",
-        props: {
-            useTotal: Number
-        },
         data() {
             return {
                 serviceId: undefined,
                 serviceList: [],
                 interfaceList: [],
                 multipleSelection: [],
-                servicePageSize: 10,
+                servicePageSize: 10, //默认展示10条服务
             }
         },
         methods: {
