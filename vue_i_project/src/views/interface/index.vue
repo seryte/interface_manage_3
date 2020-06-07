@@ -208,7 +208,7 @@
                     "method": "get",
                     "url": "",
                     "params": {},
-                    "assert": {}
+                    "asst": {}
                 }
                 this.addForm.context = JSON.stringify(context, null, 4)
                 this.addDialogVisible = true;
