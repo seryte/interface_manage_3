@@ -14,7 +14,6 @@ three
 * 2020-05-18 22:51:36
 * 2020-05-21 23:09 Paginator 
 * 2020-05-22 23:27 Paginator end
-
-
-
+* 2020-05-23 23:09 Paginator bug
+* 2020-05-24 21:59:43 Paginator bug fix stupid method
 * 2020-06-7 22:49 task run 14-2 16:56
