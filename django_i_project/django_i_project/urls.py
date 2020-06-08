@@ -20,10 +20,12 @@ from interface_app.views.interface.interface_detail import InterfaceDetailView
 from interface_app.views.interface.interface_list import InterfaceListView
 from interface_app.views.service.service_detail import ServiceDetailView
 from interface_app.views.service.service_list import ServiceListView
+from interface_app.views.task.run_task import get_task_report_list, get_task_report_detail, run_task
 from interface_app.views.task.task_detail import TaskDetailView
 from interface_app.views.task.task_list import TaskListView
 from interface_app.views.task_interface.task_interface_detail import TaskInterfaceDetailView
 from interface_app.views.task_interface.task_interface_list import TaskInterfaceListView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -43,4 +45,9 @@ urlpatterns = [
 
     path("api/task_interfaces/", TaskInterfaceListView.as_view()),
     path("api/task_interface/<int:base_id>/", TaskInterfaceDetailView.as_view()),
+
+    path("api/task/<int:task_id>/run/", run_task),
+    path("api/task/<int:task_id>/reports/", get_task_report_list),
+    path("api/task/<int:task_id>/report/<str:report_name>/", get_task_report_detail)
+
 ]
