@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'a#-9^0^ytx+1ee$qqe=%qr47c$pr0m&so$b19724h!&g^8im2s'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -52,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
-APPEND_SLASH=False
+APPEND_SLASH = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
@@ -92,14 +90,14 @@ SESSION_COOKIE_HTTPONLY = True  # 是否Session的cookie只支持http传输（�
 SESSION_COOKIE_AGE = 1209600  # Session的cookie失效日期（2周）（默认）
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 是否关闭浏览器使得Session过期（默认）
 SESSION_SAVE_EVERY_REQUEST = False  # 是否每次请求都保存Session，默认修改之后才保存（默认
-SESSION_COOKIE_SAMESITE=None   # 没这个，保持不了登录态（ django版本低于2.1,引入django-cookie-samesite处理，版本高于2.1直接按左边这种设置就行）
+SESSION_COOKIE_SAMESITE = None  # 没这个，保持不了登录态（ django版本低于2.1,引入django-cookie-samesite处理，版本高于2.1直接按左边这种设置就行）
 
 ROOT_URLCONF = 'django_i_project.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "task_test", "reports"), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,8 +110,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_i_project.wsgi.application'
+STATICFILES_DIRS=(
+    os.path.join(BASE_DIR,"task_test"),
+)
+STATIC_URL='/api_static/'
 
+WSGI_APPLICATION = 'django_i_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -124,7 +126,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -144,7 +145,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -157,7 +157,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/

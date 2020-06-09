@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from interface_app.libs.respone import response_success
@@ -43,7 +44,7 @@ def run_task(request, task_id):
 def get_task_report_list(request, task_id):
     task_reports_path = os.path.join(settings.BASE_DIR, "task_test", "reports", str(task_id))
     ret = []
-    for root, dirs, files in task_reports_path:
+    for root, dirs, files in os.walk(task_reports_path):
         for file in files:
             if os.path.splitext(file)[1] == ".html":
                 ret.append(file)
@@ -54,5 +55,12 @@ def get_task_report_list(request, task_id):
 def get_task_report_detail(request, task_id, report_name):
     task_reports_path = os.path.join(settings.BASE_DIR, "task_test", "reports", str(task_id), report_name)
     if not os.path.exists(task_reports_path):
-        return " "
-    return HttpResponse()
+        return HttpResponse()
+    else:
+        with open(task_reports_path, "r", encoding='utf-8') as f1:
+            dirty_report = f1.read()
+        public_tmp_report = dirty_report.replace('href="assets/style.css"', 'href="/static/assets/style.css" ')
+
+        with open(task_reports_path, "w", encoding="utf-8") as f2:
+            f2.write(public_tmp_report)
+        return render(request, task_reports_path)
