@@ -17,7 +17,12 @@
                 </div>
                 <div>
                     {{item.description}}
+                    <div>
+                        <a href="javascript:void(0)" @click="showReport(item.id)"
+                           style='text-decoration:none;'>查看报告</a>
+                    </div>
                 </div>
+
             </el-card>
         </div>
         <div class="pagestyle">
@@ -64,7 +69,7 @@
                 <el-button type="primary" @click="editTaskFun">确 定</el-button>
             </div>
         </el-dialog>
-
+        <!--这里是关联任务的抽屉-->
         <el-drawer
                 :visible.sync="drawerShowFlag"
                 direction="rtl"
@@ -103,8 +108,36 @@
             </el-table>
 
         </el-drawer>
+
+        <!--        这里是查看报告的抽屉-->
+        <el-drawer
+                :visible.sync="reportShowFlag"
+                direction="rtl"
+                size="40%">
+            <!--            slot是插槽，占位符的感觉，这里等于重写了title-->
+            <div slot="title">
+                <el-button type="primary" @click="runTaskFun()" v-loading.fullscreen.lock="fullscreenLoading" plain>执行任务</el-button>
+            </div>
+            <el-table
+                    :data="reports"
+                    stripe
+                    style="width: 100%">
+                <el-table-column
+                        prop="name"
+                        label="名称"
+                        min-width="40%">
+                    <template slot-scope="scope">
+                        <!--后端写死的需要优化-->
+                        <a :href="'http://localhost:8000/api/task/'+currentTaskId+'/report/'+scope.row+'/'"
+                           target="_blank">{{scope.row}}</a>
+                    </template>
+                </el-table-column>
+            </el-table>
+
+        </el-drawer>
+
         <el-dialog
-                title="关联接1口"
+                title="关联接口"
                 :visible.sync="showAddInterface"
                 width="40%">
             <selectInterface ref="selectInterface"></selectInterface>
@@ -118,7 +151,13 @@
 
 <script>
     import {addTask, deleteTask, getAllTask, updateTask} from "../../request/task";
-    import {addTaskInterface, deleteTaskInterface, getTaskInterface} from "../../request/taskInterface";
+    import {
+        addTaskInterface,
+        deleteTaskInterface,
+        getTaskInterface,
+        getTaskReports,
+        runTask
+    } from "../../request/taskInterface";
     import selectInterface from "./selectInterface"
 
     export default {
@@ -159,18 +198,21 @@
                 taskList: [],
                 interfaces: [],
                 drawerShowFlag: false,
+                reportShowFlag: false,
+                reports: [],
                 showAddInterface: false,
                 currentTaskId: 0,
                 total: 0,
                 pagesize: 10,
                 currentPage: 1,
+                fullscreenLoading: false,
             }
         },
         methods: {
             handleSizeChange: function (pagesize) {
                 this.pagesize = pagesize;
                 this.getAllTaskFun(this.currentPage, this.pagesize)
-                console.log("显示 "+this.pagesize+ "条")  //每页下拉显示数据
+                console.log("显示 " + this.pagesize + "条")  //每页下拉显示数据
             },
             handleCurrentChange: function (currentPage) {
                 this.currentPage = currentPage;
@@ -349,6 +391,43 @@
                 }).catch(() => {
                     //取消删除
                 });
+            },
+
+            showReport(taskId) {
+                this.currentTaskId = taskId;
+                getTaskReports(taskId).then(data => {
+                    let success = data.data.success
+                    if (success) {
+                        this.reports = data.data.data
+                    } else {
+                        this.$notify.error({
+                            title: "错误",
+                            message: data.data.error.message
+                        })
+                    }
+                })
+                this.reportShowFlag = true;
+            },
+            runTaskFun() {
+                this.fullscreenLoading = true
+                runTask(this.currentTaskId).then(data => {
+                    let success = data.data.success
+                    if (success) {
+                        this.showReport(this.currentTaskId)
+                        this.$message({
+                            message: '执行成功',
+                            type: 'success'
+                        });
+                        this.getAllTaskFun(this.currentPage, this.pagesize)
+                    } else {
+                        this.$notify.error({
+                            title: "错误",
+                            message: data.data.error.message
+                        })
+                    }
+                    this.fullscreenLoading = false
+                })
+
             },
         },
 

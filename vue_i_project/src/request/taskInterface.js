@@ -15,3 +15,14 @@ export const deleteTaskInterface = function (taskInterfaceId) {
     return deleteRequest(`api/task_interface/${taskInterfaceId}/`)
 
 }
+
+
+export const getTaskReports = function (taskId) {
+    return getRequest(`api/task/${taskId}/reports/`)
+
+}
+
+export const runTask = function (taskId) {
+    return getRequest(`api/task/${taskId}/run/`)
+
+}

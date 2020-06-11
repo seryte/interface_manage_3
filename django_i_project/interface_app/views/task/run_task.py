@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+import datetime
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -37,7 +37,7 @@ def run_task(request, task_id):
     _create_task_report_dir(task_id)
     _add_task_to_run_model(task_id)
     _run_py_test(task_id)
-    return HttpResponse()
+    return response_success()
 
 
 @require_http_methods(["GET"])

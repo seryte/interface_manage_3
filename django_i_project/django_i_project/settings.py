@@ -110,10 +110,10 @@ TEMPLATES = [
     },
 ]
 
-STATICFILES_DIRS=(
-    os.path.join(BASE_DIR,"task_test"),
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "task_test"),
 )
-STATIC_URL='/api_static/'
+STATIC_URL = '/api_static/'
 
 WSGI_APPLICATION = 'django_i_project.wsgi.application'
 
