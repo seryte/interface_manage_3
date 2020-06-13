@@ -48,6 +48,7 @@ def get_task_report_list(request, task_id):
         for file in files:
             if os.path.splitext(file)[1] == ".html":
                 ret.append(file)
+    ret.reverse()
     return response_success(ret)
 
 
