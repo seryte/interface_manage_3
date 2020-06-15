@@ -21,6 +21,13 @@
                 </template>
             </el-table-column>
 
+            <el-table-column
+                    label="所属服务">
+                <template slot-scope="scope">
+                    {{scope.row.service_name}}
+                </template>
+            </el-table-column>
+
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
                     <el-button
@@ -135,7 +142,7 @@
             editorInit: function () {
                 require('brace/ext/language_tools') //language extension prerequsite...
                 require('brace/mode/json')
-                require('brace/mode/javascript')    //language  这里改为sjon
+                require('brace/mode/javascript')    //language  这里改为json
                 require('brace/mode/less')
                 require('brace/theme/chrome')
                 require('brace/snippets/javascript') //snippet
