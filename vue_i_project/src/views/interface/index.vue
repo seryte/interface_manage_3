@@ -17,7 +17,7 @@
             <el-table-column
                     label="URL">
                 <template slot-scope="scope">
-                    {{scope.row.context.url}}
+                    <a :href="scope.row.context.url" target="_blank">{{scope.row.context.url}}</a>
                 </template>
             </el-table-column>
 

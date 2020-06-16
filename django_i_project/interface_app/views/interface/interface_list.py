@@ -23,13 +23,31 @@ class InterfaceListView(MyBaseListView):
         :return:
         """
         service_id = request.GET.get("service_id", 0)
-        interfaces = self.model.objects.filter(service_id=service_id)
-        service_name = Service.objects.filter(id=service_id).first().name
         ret = []
-        for s in interfaces:
-            t = {"id": s.id, "name": s.name, "description": s.description, "service_id": s.service_id,
-                 "service_name": service_name, "context": json.loads(s.context)}
-            ret.append(t)
+        if service_id == "0":
+            interfaces_lists = self.model.objects.all()
+            for s in interfaces_lists:
+                t = {"id": s.id,
+                     "name": s.name,
+                     "description": s.description,
+                     "service_id": s.service_id,
+                     "service_name": Service.objects.filter(id=s.service_id).first().name,
+                     "context": json.loads(s.context)
+                     }
+                ret.append(t)
+        else:
+            interfaces = self.model.objects.filter(service_id=service_id)
+            service_name = Service.objects.filter(id=service_id).first().name
+
+            for s in interfaces:
+                t = {"id": s.id,
+                     "name": s.name,
+                     "description": s.description,
+                     "service_id": s.service_id,
+                     "service_name": service_name,
+                     "context": json.loads(s.context)
+                     }
+                ret.append(t)
         return response_success(ret)
 
     def post(self, request, *args, **kwargs):
